@@ -281,4 +281,4 @@ This project is operated by Unimak Campus Trade, a registered student organizati
 - Fatmata Bah
 
 # Github Link
-
+https://github.com/Mohamed-Sillah/Unimak-Campus-Trade.git
