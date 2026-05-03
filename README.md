@@ -75,31 +75,34 @@ npm run preview
 src/
 ├── assets/
 │   └── styles/
-│       └── global.css           # Global styles
+│       ├── global.css           # Global styles
+│       ├── images/
 ├── components/
 │   ├── admin/
 │   │   └── AdminSidebar.jsx     # Admin navigation sidebar
 │   ├── common/
 │   │   ├── Footer.jsx
 │   │   ├── Navbar.jsx
+│   │   ├── Notification.js
+│   │   ├── NotificationPopup.js
 │   │   └── ProtectedRoute.jsx   # Role-based route protection
 │   └── product/
 │       └── ProductCard.jsx      # Reusable product display
 ├── context/
 │   ├── AuthContext.jsx          # User & login state
-│   └── CartContext.jsx          # Shopping cart state
+│   └── NotificationContext.jsx  
 ├── layouts/
 │   ├── AdminLayout.jsx          # Sidebar + outlet for admin pages
 │   └── PublicLayout.jsx         # Navbar + footer for public pages
 ├── pages/
 │   ├── admin/
-│   │   ├── CreateListing.jsx    # Create/edit listings (admin-only)
+│   │   ├── CreateListing.jsx    # Create listings (admin-only)
 │   │   ├── Dashboard.jsx        # Overview & analytics
-│   │   ├── Orders.jsx           # Order management
-│   │   └── Payouts.jsx          # Payout tracking & export
+│   │   ├── Categories.jsx       
+│   │   └── EditListing.jsx      # Edit listings (admin-only) 
 │   └── public/
-│       ├── Cart.jsx
-│       ├── Checkout.jsx
+│       ├── Login.jsx
+│       ├── ForgotPassword.jsx
 │       ├── Home.jsx
 │       ├── Product.jsx
 │       └── ProductDetails.jsx
@@ -135,14 +138,10 @@ const { user, login, logout } = useAuth();
 **Public Routes:**
 - `/` — Landing/home page
 - `/product/:id` — Product details
-- `/cart` — Shopping cart
-- `/checkout` — Payment & order confirmation
 
 **Admin Routes (Protected):**
 - `/admin` — Dashboard (overview, stats)
 - `/admin/create-listing` — Create/edit product
-- `/admin/orders` — Order management
-- `/admin/payouts` — Financial tracking
 
 Protected routes use `ProtectedRoute` wrapper, which checks `role === "ADMIN"` against AuthContext.
 
@@ -172,18 +171,12 @@ The frontend expects these endpoints:
 | GET | `/products/:id` | Public | Get product details |
 | PATCH | `/products/:id` | Admin | Edit listing |
 | DELETE | `/products/:id` | Admin | Remove listing |
-| POST | `/orders` | Registered | Create order |
-| GET | `/orders` | Admin | List all orders |
-| PATCH | `/orders/:id` | Admin | Update order status |
-| GET | `/payouts` | Admin | Get pending payouts |
-| PATCH | `/payouts/:id` | Admin | Mark payout completed |
 
 ## Admin-Only Features
 
 These require `role="ADMIN"` in user object:
 
 - **Create/Edit/Delete Listings**: Manual entry of products with internal fields (seller name, contact, agreed payout method, notes)
-- **Order Management**: View all orders, mark as completed/picked-up
 - **Financial Dashboard**: Track total sales, 6% fees, amounts pending to students
 - **Payout Export**: Generate CSV/PDF reports for manual student remittance
 - **Site Management**: Categories, settings, user bans, order cancellations
@@ -237,8 +230,6 @@ Admins manually create listings after off-system validation:
 
 ⚠️ **6% Retention**: Stripe captures 100% of payment. The 6% fee is retained naturally; 94% is remitted manually to students.
 
-⚠️ **Cart Tracking**: Current implementation stores product objects in array. If you need quantity tracking, extend the `cartItems` structure.
-
 ⚠️ **Auth Persistence**: Login state is lost on page refresh. Consider syncing with `localStorage` or server sessions.
 
 ## Troubleshooting
@@ -268,6 +259,9 @@ Admins manually create listings after off-system validation:
 ## License
 
 This project is operated by Unimak Campus Trade, a registered student organization.
+
+## Project Supervisor
+-Mr Lukeman Sahid Kamara
 
 ## Contact / Author
 ## Contributors
