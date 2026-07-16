@@ -5,25 +5,33 @@ import { fileURLToPath } from "url";
 export async function seedDatabase() {
   try {
     const db = getDb();
+    const adminEmail = "sillah@university.edu";
+    const adminName = "Admin User";
+    const adminPassword = "sillah001";
 
-    // Check if admin already exists
-    const adminExists = await db.get(
-      "SELECT * FROM users WHERE role = ?",
-      ["ADMIN"]
+    const existingAdmin = await db.get(
+      "SELECT * FROM users WHERE role = ? OR email = ?",
+      ["ADMIN", adminEmail]
     );
 
-    if (!adminExists) {
-      const hashedPassword = await bcrypt.hash("sillah001", 10);
+    if (!existingAdmin) {
+      const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
       await db.run(
         "INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, ?)",
-        ["sillah@university.edu", hashedPassword, "Admin User", "ADMIN"]
+        [adminEmail, hashedPassword, adminName, "ADMIN"]
       );
-
-      console.log("✓ Admin user created");
-      console.log("  Email: sillah@university.edu");
-      console.log("  Password: sillah001");
+    } else {
+      const hashedPassword = await bcrypt.hash(adminPassword, 10);
+      await db.run(
+        "UPDATE users SET email = ?, name = ?, password = ? WHERE id = ?",
+        [adminEmail, adminName, hashedPassword, existingAdmin.id]
+      );
     }
+
+    console.log("✓ Admin user ensured");
+    console.log(`  Email: ${adminEmail}`);
+    console.log(`  Password: ${adminPassword}`);
 
     // Check if sample products exist
     const productCount = await db.get("SELECT COUNT(*) as count FROM products");

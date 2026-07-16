@@ -23,7 +23,7 @@ npm run seed
 ```
 
 This creates:
-- **Admin user**: `admin@university.edu` / `admin123`
+- **Admin user**: `sillah@university.edu` / `sillah001`
 - **Sample products**: 3 test listings
 
 ## API Endpoints
