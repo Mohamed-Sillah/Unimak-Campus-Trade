@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect, useCallback } from "rea
 import { useAuth } from "./AuthContext";
 import api from "../services/api";
 
-const NotificationContext = createContext();
+const NotificationContext = createContext(null);
 
 export function NotificationProvider({ children }) {
   const { user } = useAuth();
@@ -124,4 +124,11 @@ export function NotificationProvider({ children }) {
   );
 }
 
-export const useNotification = () => useContext(NotificationContext);
+
+export const useNotification = () => {
+  const context = useContext(NotificationContext);
+  if (!context) {
+    throw new Error("useNotification must be used within a NotificationProvider");
+  }
+  return context;
+};
